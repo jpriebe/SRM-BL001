@@ -57,6 +57,8 @@ function generateSequence(newRhythm) {
         newRhythm = true;
     }
 
+    _selectedNotes = [60, 64, 67];
+
     if (_selectedNotes.length < 1) {
         // if user hasn't selected any notes, bail out -- would be nicer to show 
         // the user a message so he knows how to use the generator
@@ -72,9 +74,11 @@ function generateSequence(newRhythm) {
     // build midi notes corresponding to the steps
     for (var i = 0; i < _steps.length; i++) {
         var step = _steps[i];
-        var note = new Note(step.note, i / 4.0,  step.duration, step.velocity);
+        var note = new Note(step.note, i / 4.0,  step.duration / 480, step.velocity);
         _notes.push(note);
     }
+
+    post("Generated sequence with " + _notes.length + " notes")
 
     // TODO -- enable exporting notes to clip
     //replaceAllNotes()
@@ -88,6 +92,69 @@ function sendSteps() {
         var step = _steps[i];
         outlet(0, "step", i + 1, step.note, step.velocity, 120, step.probability)
     }
+}
+
+// called in response to user clicking the "clip" text object;
+// create a new clip and load it with the notes we generated
+function clip() {
+    var track = new LiveAPI("this_device canonical_parent");
+    var clipSlots = track.getcount("clip_slots");
+    var clipSlot;
+
+    var firstClip = null;
+
+    for (var clipSlotNum = 0; clipSlotNum < clipSlots; clipSlotNum++) {
+        clipSlot = new LiveAPI("this_device canonical_parent clip_slots " + clipSlotNum);
+        var hasClip = clipSlot.get("has_clip").toString() !== "0";
+        if (!hasClip) break;
+    }
+
+    if (clipSlotNum === clipSlots) {
+        // have to create new clip slot (scene)
+        var set = new LiveAPI("live_set");
+        set.call("create_scene", -1);
+        clipSlot = new LiveAPI("this_device canonical_parent clip_slots " + clipSlotNum);
+    }
+
+    post("Creating clip in slot " + clipSlotNum + "\n")
+
+    post("Setting notes in clip; num notes: " + _notes.length + "\n")
+
+    var beats = Math.ceil(_notes.length / 4);
+    post("num beats: " + beats + "\n")
+
+    clipSlot.call("create_clip", beats);
+    var clip = new LiveAPI("this_device canonical_parent clip_slots " + clipSlotNum + " clip");
+    //var notes = generateMidi();
+
+    post("Setting notes in clip...\n")
+
+    setNotes(clip, _notes);
+}
+
+function setNotes(clip, notes) {
+    clip.call("set_notes");
+
+    nonZeroCount = 0;
+    for (var i = 0; i < notes.length; i++) {
+        var note = notes[i];
+        if (note.Velocity > 0) {
+            nonZeroCount++;
+        }
+    }
+
+    clip.call("notes", nonZeroCount);
+
+    for (var i = 0; i < notes.length; i++) {
+        var note = notes[i];
+        if (note.Velocity === 0) {
+            continue;
+        }
+        post(JSON.stringify(note) + "\n")
+        clip.call("note", note.Pitch, note.Start.toFixed(4), note.Duration.toFixed(4), note.Velocity, note.Muted);
+    }
+
+    clip.call("done");
 }
 
 

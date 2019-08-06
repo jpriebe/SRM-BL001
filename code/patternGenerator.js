@@ -71,11 +71,13 @@ function pattern_to_steps (ap, notes) {
                     steps[last_note_down].duration += 120;
                 }
                 steps[i].velocity = 0;
+                steps[i].duration = 0;
                 steps[i].note = 0;
                 steps[i].probability = 0;
                 break;
             case '.':
                 steps[i].velocity = 0;
+                steps[i].duration = 0;
                 steps[i].note = 0;
                 steps[i].probability = 0;
                 break;
