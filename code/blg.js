@@ -11,6 +11,14 @@ var _notes = []
 
 var _pg = require('./patternGenerator.js')
 
+var _pg_params = {
+    'newRhythm': true,
+    'newAccentPattern': true,
+    'accentProbability': 50,
+    'accentIntensity': 50,
+    'maxNumAccents': 3,
+}
+
 var _init = false;
 
 function liveInit() {
@@ -18,13 +26,38 @@ function liveInit() {
     _init = true;
 }
 
-function regenAll() {
-    generateSequence();
-    sendSteps();
+// called when user clicks new rhythm checkbox
+function toggleNewRhythm(val) {
+    _pg_params.newRhythm = val;
 }
 
-function regenPitches() {
-    generateSequence(false);
+// called when user clicks new accents checkbox
+function toggleNewAccents(val) {
+    _pg_params.newAccentPattern = val;
+}
+
+// callend when user changes accent probability
+function setAccentProbability(val) {
+    val = Math.floor(val);
+    post("set accent probability: " + val + "\n");
+    _pg_params.accentProbability = val;
+}
+
+// callend when user changes accent intensity
+function setAccentIntensity(val) {
+    val = Math.floor(val);
+    post("set accent intensity: " + val + "\n");
+    _pg_params.accentIntensity = val;
+}
+
+// called when user sets max num accents
+function setMaxNumAccents(val) {
+    _pg_params.maxNumAccents = val;
+}
+
+// called when user clicks regen
+function regen() {
+    generateSequence();
     sendSteps();
 }
 
@@ -51,13 +84,10 @@ function noteChange(note, velocity) {
 }
 
 // triggered in response to the bang message received when user clicks the "Generate" text object 
-function generateSequence(newRhythm) {
+function generateSequence() {
 
-    if (typeof newRhythm === "undefined") {
-        newRhythm = true;
-    }
-
-    _selectedNotes = [60, 64, 67];
+    // TODO - remove this -- it's just for debugging without a MIDI keyboard
+    //_selectedNotes = [60, 64, 67];
 
     if (_selectedNotes.length < 1) {
         // if user hasn't selected any notes, bail out -- would be nicer to show 
@@ -68,8 +98,7 @@ function generateSequence(newRhythm) {
     _notes = [];
     _steps = [];
 
-    // TODO - get notes from midi in!
-    _steps = _pg.generateSteps(_selectedNotes, newRhythm)
+    _steps = _pg.generateSteps(_selectedNotes, _pg_params)
 
     // build midi notes corresponding to the steps
     for (var i = 0; i < _steps.length; i++) {
@@ -78,10 +107,7 @@ function generateSequence(newRhythm) {
         _notes.push(note);
     }
 
-    post("Generated sequence with " + _notes.length + " notes")
-
-    // TODO -- enable exporting notes to clip
-    //replaceAllNotes()
+    post("Generated sequence with " + _notes.length + " notes\n");
 }
 
 // loads the steps into the sequencer

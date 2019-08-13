@@ -1,0 +1,16 @@
+- have option to keep notes and pattern, so you can cycle through accent patterns; thre will be some interaction
+  between the "new rhythm" checkbox and the "new notes" checkbox.  If you select a new rhythm, you have to select new notes, so checking "new rhythm" must automatically check "new notes"
+
+- add some accent patterns that are more likely to get accents (like XXXXXXXX or X.X.X.X.)
+
+- add tons more patterns
+
+- have a way to get some notes in there without a keyboard
+
+- help user discover the keyboard selection (maybe display selected notes on screen?)
+
+- allow for control over max num of accents, including unlimited
+
+- fix the clip mechanism  --- make sure it honors the accents
+
+- add transpose buttons: +12 +1 -1 -12; when transposing, fold and unfold the live.step
