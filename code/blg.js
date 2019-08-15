@@ -17,6 +17,7 @@ var _pg_params = {
     'accentProbability': 50,
     'accentIntensity': 50,
     'maxNumAccents': 3,
+    'frontWeight': 0,
 }
 
 var _init = false;
@@ -36,14 +37,22 @@ function toggleNewAccents(val) {
     _pg_params.newAccentPattern = val;
 }
 
-// callend when user changes accent probability
+// called when user changes front weighting
+function setFrontWeight(val) {
+    val = Math.floor(val);
+    post("set front weight: " + val + "\n");
+    _pg_params.frontWeight = val;
+}
+
+
+// called when user changes accent probability
 function setAccentProbability(val) {
     val = Math.floor(val);
     post("set accent probability: " + val + "\n");
     _pg_params.accentProbability = val;
 }
 
-// callend when user changes accent intensity
+// called when user changes accent intensity
 function setAccentIntensity(val) {
     val = Math.floor(val);
     post("set accent intensity: " + val + "\n");
@@ -77,6 +86,35 @@ function noteChange(note, velocity) {
 
     if (velocity > 0) {
         _selectedNotes.push(note)
+    }
+
+    if (_selectedNotes.length == 0) {
+        o = this.patcher.getnamed("pnlInstructions");
+        o.hidden = 0;
+        o = this.patcher.getnamed("cmtInstructions");
+        o.hidden = 0;
+        o = this.patcher.getnamed("txtRegen");
+        o.hidden = 1;
+        o = this.patcher.getnamed("sldAccentProb");
+        o.hidden = 1;
+        o = this.patcher.getnamed("sldAccentIntensity");
+        o.hidden = 1;
+        o = this.patcher.getnamed("sldFrontWeight");
+        o.hidden = 1;
+    }
+    else {
+        o = this.patcher.getnamed("txtRegen");
+        o.hidden = 0;
+        o = this.patcher.getnamed("sldAccentProb");
+        o.hidden = 0;
+        o = this.patcher.getnamed("sldAccentIntensity");
+        o.hidden = 0;
+        o = this.patcher.getnamed("sldFrontWeight");
+        o.hidden = 0;
+        o = this.patcher.getnamed("cmtInstructions");
+        o.hidden = 1;
+        o = this.patcher.getnamed("pnlInstructions");
+        o.hidden = 1;
     }
 
     //post(note + ", " + velocity + "\n")
@@ -169,6 +207,7 @@ function setNotes(clip, notes) {
         }
     }
 
+    post("clip.call(notes, " + nonZeroCount + ")")
     clip.call("notes", nonZeroCount);
 
     for (var i = 0; i < notes.length; i++) {

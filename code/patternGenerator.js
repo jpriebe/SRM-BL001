@@ -8,11 +8,16 @@ var _accent_patterns = [
     '.X.X............X.X.............',
     'X.X............X.X..............',
     '............X.X..............X.X',
+    'X.X.',
+    '.X.X',
+    'XX.XXX.X',
+    'XX.X.X.X',
+    'X..X..X.',
+    'XXXXXXXX',
 ]
 
 var _patterns = [
     {
-        //'rhythm': '................................',
         'rhythm': 'X.X...X.X..X.XX.X.X...X.X.......',
     },
     {
@@ -48,13 +53,88 @@ var _patterns = [
     {
         'rhythm': '..X...X...........X...X...X.......X...X...........XX..XX..X.....',
     },
+    {
+        'rhythm': 'X...X...X..X..X.X...X...X..X.X..',
+    },
+    {
+        'rhythm': '..................X....X.XX.....',
+    },
+    {
+        'rhythm': 'X.X...X.X....XX.',
+    },
+    {
+        'rhythm': 'X.X...X.X....XX.X.X...X.X..X.XX.',
+    },
+    {
+        'rhythm': 'X.X...X.X....XX.X.X.X.X.X....XX.',
+    },
+    {
+        'rhythm': 'Xxx...X.X...X...',
+    },
+    {
+        'rhythm': 'Xxx...X.X...X...Xxx...X.X.....XX',
+    },
+    {
+        'rhythm': 'X..XX.X.X..XX.X.X..XX.X.....Xxx.',
+    },
+    {
+        'rhythm': 'X..XX.X.X..XX.X.X..XX.X...XxX...',
+    },
+    {
+        'rhythm': 'X..X..........XxX..X............',
+    },
+    {
+        'rhythm': 'X.....X.X.......X..X..X.X.......',
+    },
+    {
+        'rhythm': 'X.X.X.XxX.....X.X.X.X.XxX.......',
+    },
+    {
+        'rhythm': '..X..X..X.....XX..X..X..X.......',
+    },
 ]
 
 var _current_pattern = null;
 var _current_accent_pattern = null;
 var _current_accents = [];
+var _note_weights = [];
 
 var _baseline_velocity = 96;
+
+function generate_note_weights (num_notes, front_weight) {
+    var i = 0;
+    var total = 0;
+    _note_weights = [];
+    var scale_factor = 0.95;
+    for (i = 0; i < num_notes; i++) {
+        var x = i + 1;
+        var y = 1 / (x - scale_factor) * (front_weight / 100) + 1 * ((100 - front_weight) / 100);
+        _note_weights.push (y);
+
+        total += y;
+    }
+
+    for (i = 0; i < num_notes; i++) {
+        _note_weights[i] /= total;
+    }
+}
+
+function select_random_note (notes) {
+    var r = Math.random()
+
+    var total = 0;
+    for (var i = 0; i < _note_weights.length; i++) {
+        total += _note_weights[i]
+
+        if (total >= r) {
+            return notes[i]
+        }
+    }
+
+    // just in case
+    return notes[0];
+}
+
 
 function pattern_to_steps (notes, params) {
     var i = 0;
@@ -66,9 +146,9 @@ function pattern_to_steps (notes, params) {
     var beats = rhythm.split('');
 
     var last_note_down = -1;
+    generate_note_weights(notes.length, params.frontWeight)
     for (i = 0; i < beats.length; i++) {
-        r = Math.floor(Math.random() * notes.length);
-        var note = notes[r];
+        var note = select_random_note (notes);
 
         //post("note: " + note + "\n")
         //post("notes.length: " + notes.length) + "\n"

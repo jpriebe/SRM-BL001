@@ -1,7 +1,13 @@
+- Bugs:
+  - sometimes _notes.length = 0 when we hit "clip" - crashes m4l
+  - note count not right during clip creation
+  - some notes have duration = null when we hit "clip" - fails to write clip
+  - hover text is showing on controls beneath the "press and hold" message
+
+- maybe a "lock notes" button so you can let go of the keys
+
 - have option to keep notes and pattern, so you can cycle through accent patterns; thre will be some interaction
   between the "new rhythm" checkbox and the "new notes" checkbox.  If you select a new rhythm, you have to select new notes, so checking "new rhythm" must automatically check "new notes"
-
-- add some accent patterns that are more likely to get accents (like XXXXXXXX or X.X.X.X.)
 
 - add tons more patterns
 
@@ -13,4 +19,4 @@
 
 - fix the clip mechanism  --- make sure it honors the accents
 
-- add transpose buttons: +12 +1 -1 -12; when transposing, fold and unfold the live.step
+- add transpose buttons: +12 +1 -1 -12; when transposing, fold and unfold the live.step, or zoom to fit
