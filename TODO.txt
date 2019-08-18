@@ -3,11 +3,11 @@
   - note count not right during clip creation
   - some notes have duration = null when we hit "clip" - fails to write clip
   - hover text is showing on controls beneath the "press and hold" message
+  - not sure velocities, durations, etc. are being set properly across all notes in the live.step
+  - sometimes I see non-zero pitches with zero velocity (like an unfilled box)
+  - edit notes, hit transpose; edits are lost
 
-- maybe a "lock notes" button so you can let go of the keys
-
-- have option to keep notes and pattern, so you can cycle through accent patterns; thre will be some interaction
-  between the "new rhythm" checkbox and the "new notes" checkbox.  If you select a new rhythm, you have to select new notes, so checking "new rhythm" must automatically check "new notes"
+- have "new note assignments" toggle; when unselected, you can regen just the accent pattern; if you select "new rhythm", "new note assignments" is automatically checked.
 
 - add tons more patterns
 
@@ -19,4 +19,4 @@
 
 - fix the clip mechanism  --- make sure it honors the accents
 
-- add transpose buttons: +12 +1 -1 -12; when transposing, fold and unfold the live.step, or zoom to fit
+- when transposing, fold and unfold the live.step, or zoom to fit

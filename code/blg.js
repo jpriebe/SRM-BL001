@@ -4,10 +4,13 @@ autowatch = 1;
 
 include("lm.js");
 
-var _selectedNotes = []
+var _active_notes = []
+var _selected_notes = []
 
 var _steps = []
 var _notes = []
+
+var _lock_note_selection = false;
 
 var _pg = require('./patternGenerator.js')
 
@@ -25,6 +28,16 @@ var _init = false;
 function liveInit() {
     post("[liveInit] entering...\n")
     _init = true;
+}
+
+// called when user clicks new accents checkbox
+function toggleLockNoteSelection(val) {
+    _lock_note_selection = val;
+
+    // when the lock is removed, we want the selected notes to immediately be set to the active notes
+    if (!_lock_note_selection) {
+        noteChange (null, 0);
+    }
 }
 
 // called when user clicks new rhythm checkbox
@@ -80,15 +93,30 @@ function Note(pitch, start, duration, velocity) {
 
 // triggered via a message when midi notes change
 function noteChange(note, velocity) {
-    _selectedNotes = _selectedNotes.filter(function(item) { 
-        return item !== note
-    })
+    if (note !== null) {
+        _active_notes = _active_notes.filter(function(item) { 
+            return item !== note
+        })
 
-    if (velocity > 0) {
-        _selectedNotes.push(note)
+        if (velocity > 0) {
+            _active_notes.push(note)
+        }
     }
 
-    if (_selectedNotes.length == 0) {
+    if (_lock_note_selection) {
+        return;
+    }
+
+    _selected_notes = []
+    for (var i = 0; i < _active_notes.length; i++) {
+        _selected_notes.push(_active_notes[i]);
+    }
+
+    if (_active_notes.length == 0) {
+        o = this.patcher.getnamed("togLockSelectedNotes");
+        o.hidden = 1;
+        o = this.patcher.getnamed("cmtLockSelectedNotes");
+        o.hidden = 1;
         o = this.patcher.getnamed("pnlInstructions");
         o.hidden = 0;
         o = this.patcher.getnamed("cmtInstructions");
@@ -111,6 +139,10 @@ function noteChange(note, velocity) {
         o.hidden = 0;
         o = this.patcher.getnamed("sldFrontWeight");
         o.hidden = 0;
+        o = this.patcher.getnamed("togLockSelectedNotes");
+        o.hidden = 0;
+        o = this.patcher.getnamed("cmtLockSelectedNotes");
+        o.hidden = 0;
         o = this.patcher.getnamed("cmtInstructions");
         o.hidden = 1;
         o = this.patcher.getnamed("pnlInstructions");
@@ -118,7 +150,7 @@ function noteChange(note, velocity) {
     }
 
     //post(note + ", " + velocity + "\n")
-    post ("selected notes: " + _selectedNotes.join(', ') + "\n")
+    post ("selected notes: " + _active_notes.join(', ') + "\n")
 }
 
 // triggered in response to the bang message received when user clicks the "Generate" text object 
@@ -127,7 +159,7 @@ function generateSequence() {
     // TODO - remove this -- it's just for debugging without a MIDI keyboard
     //_selectedNotes = [60, 64, 67];
 
-    if (_selectedNotes.length < 1) {
+    if (_selected_notes.length < 1) {
         // if user hasn't selected any notes, bail out -- would be nicer to show 
         // the user a message so he knows how to use the generator
         return;
@@ -136,7 +168,7 @@ function generateSequence() {
     _notes = [];
     _steps = [];
 
-    _steps = _pg.generateSteps(_selectedNotes, _pg_params)
+    _steps = _pg.generateSteps(_selected_notes, _pg_params)
 
     // build midi notes corresponding to the steps
     for (var i = 0; i < _steps.length; i++) {
@@ -146,6 +178,17 @@ function generateSequence() {
     }
 
     post("Generated sequence with " + _notes.length + " notes\n");
+}
+
+// called from the +12 -12 buttons
+function transpose (value) {
+    for (var i = 0; i < _steps.length; i++) {
+        if (_steps[i].note > 0) {
+            _steps[i].note += value;
+        }
+    }
+
+    sendSteps();
 }
 
 // loads the steps into the sequencer
