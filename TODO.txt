@@ -7,8 +7,6 @@
   - sometimes I see non-zero pitches with zero velocity (like an unfilled box)
   - edit notes, hit transpose; edits are lost
 
-- have "new note assignments" toggle; when unselected, you can regen just the accent pattern; if you select "new rhythm", "new note assignments" is automatically checked.
-
 - add tons more patterns
 
 - have a way to get some notes in there without a keyboard
@@ -20,3 +18,5 @@
 - fix the clip mechanism  --- make sure it honors the accents
 
 - when transposing, fold and unfold the live.step, or zoom to fit
+
+- undo mechanism (maybe 100 undo patterns?)
