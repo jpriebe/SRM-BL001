@@ -101,6 +101,8 @@ var _note_weights = [];
 
 var _baseline_velocity = 96;
 
+var _last_steps = [];
+
 function generate_note_weights (num_notes, front_weight) {
     var i = 0;
     var total = 0;
@@ -145,41 +147,45 @@ function pattern_to_steps (notes, params) {
     var rhythm = _current_pattern['rhythm'];
     var beats = rhythm.split('');
 
-    var last_note_down = -1;
-    generate_note_weights(notes.length, params.frontWeight)
-    for (i = 0; i < beats.length; i++) {
-        var note = select_random_note (notes);
+    if (params.newNoteAssignments) {
+        var last_note_down = -1;
+        generate_note_weights(notes.length, params.frontWeight)
+        for (i = 0; i < beats.length; i++) {
+            var note = select_random_note (notes);
 
-        //post("note: " + note + "\n")
-        //post("notes.length: " + notes.length) + "\n"
+            //post("note: " + note + "\n")
+            //post("notes.length: " + notes.length) + "\n"
 
-        steps[i] = {
-            note: note,
-        }
-        switch (beats[i]) {
-            case 'X':
-                steps[i].velocity = _baseline_velocity;
-                steps[i].duration = 120;
-                steps[i].probability = 100;
-                last_note_down = i;
-                break;
-            case '-':
-                if (last_note_down > -1) {
-                    steps[last_note_down].duration += 120;
-                }
-                steps[i].velocity = 0;
-                steps[i].duration = 0;
-                steps[i].note = 0;
-                steps[i].probability = 0;
-                break;
-            case '.':
-                steps[i].velocity = 0;
-                steps[i].duration = 0;
-                steps[i].note = 0;
-                steps[i].probability = 0;
-                break;
-        }
-    } 
+            steps[i] = {
+                note: note,
+            }
+            switch (beats[i]) {
+                case 'X':
+                    steps[i].velocity = _baseline_velocity;
+                    steps[i].duration = 120;
+                    steps[i].probability = 100;
+                    last_note_down = i;
+                    break;
+                    case '-':
+                    if (last_note_down > -1) {
+                        steps[last_note_down].duration += 120;
+                    }
+                    steps[i].velocity = 0;
+                    steps[i].duration = 0;
+                    steps[i].note = 0;
+                    steps[i].probability = 0;
+                    break;
+                case '.':
+                    steps[i].velocity = 0;
+                    steps[i].duration = 0;
+                    steps[i].note = 0;
+                    steps[i].probability = 0;
+                    break;
+            }
+        } 
+    } else {
+        steps = _last_steps;
+    }
 
     if (params.newAccentPattern) {
         calculate_accents (params);
@@ -201,6 +207,9 @@ function apply_accents (steps, params)
         if (steps[i].velocity === 0) {
             continue;
         }
+
+        steps[i].velocity = _baseline_velocity;
+
         var idx = i % _current_accent_pattern.length;
         if (_current_accent_pattern[idx] === 0) {
             continue;
@@ -223,13 +232,14 @@ function calculate_accents (params)
     var i = 0;
 
     post("calculating accents...\n");
+    _current_accents = [];
     var accent_boost = Math.floor(127 - _baseline_velocity * params.accentIntensity / 100);
     post("accent boost: " + accent_boost + "...\n");
     var accents = _current_accent_pattern.split('');
     for (i = 0; i < accents.length; i++) {
+        _current_accents.push(0);
         switch (accents[i]) {
             case '.':
-                _current_accents[i] = 0;
                 continue;
         }
 
@@ -256,6 +266,7 @@ function generateSteps (notes, params) {
     }
 
     var steps = pattern_to_steps (notes, params);
+    _last_steps = steps;
 
     post(JSON.stringify(params) + "\n");
     //post(JSON.stringify(steps) + "\n");

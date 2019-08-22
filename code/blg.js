@@ -16,6 +16,7 @@ var _pg = require('./patternGenerator.js')
 
 var _pg_params = {
     'newRhythm': true,
+    'newNoteAssignments': true,
     'newAccentPattern': true,
     'accentProbability': 50,
     'accentIntensity': 50,
@@ -43,6 +44,21 @@ function toggleLockNoteSelection(val) {
 // called when user clicks new rhythm checkbox
 function toggleNewRhythm(val) {
     _pg_params.newRhythm = val;
+
+    var o1 = this.patcher.getnamed("togNewNoteAssign");
+    var o2 = this.patcher.getnamed("pnlNewNoteAssign");
+    if (val) {
+        o1.ignoreclick = 1;
+        o2.hidden = 0;
+    } else {
+        o1.ignoreclick = 0;
+        o2.hidden = 1;
+    }
+}
+
+// called when user clicks new note assignments checkbox
+function toggleNewNoteAssignments(val) {
+    _pg_params.newNoteAssignments = val;
 }
 
 // called when user clicks new accents checkbox
