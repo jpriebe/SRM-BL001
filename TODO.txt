@@ -1,22 +1,11 @@
-- Bugs:
-  - sometimes _notes.length = 0 when we hit "clip" - crashes m4l
-  - note count not right during clip creation
-  - some notes have duration = null when we hit "clip" - fails to write clip
-  - hover text is showing on controls beneath the "press and hold" message
-  - not sure velocities, durations, etc. are being set properly across all notes in the live.step
-  - sometimes I see non-zero pitches with zero velocity (like an unfilled box)
-  - edit notes, hit transpose; edits are lost
-
 - add tons more patterns
+
+- support for slide
 
 - have a way to get some notes in there without a keyboard
 
-- help user discover the keyboard selection (maybe display selected notes on screen?)
-
 - allow for control over max num of accents, including unlimited
 
-- fix the clip mechanism  --- make sure it honors the accents
-
-- when transposing, fold and unfold the live.step, or zoom to fit
+- when generating or transposing, fold and unfold the live.step, or zoom to fit
 
 - undo mechanism (maybe 100 undo patterns?)
