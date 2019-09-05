@@ -32,7 +32,10 @@ var _pg_params = {
 var _init = false;
 
 function liveInit() {
-    post("[liveInit] entering...\n")
+    post("[liveInit] unchecking togLockSelectedNotes...\n")
+    var o1 = this.patcher.getnamed("togLockSelectedNotes")
+    o1.assign(0)
+    post("[liveInit] done.\n")
     _init = true;
 }
 
