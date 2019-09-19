@@ -130,10 +130,12 @@ function noteChange(note, velocity) {
         return;
     }
 
+    var num_selected_before = _selected_notes.length;
     _selected_notes = []
     for (var i = 0; i < _active_notes.length; i++) {
         _selected_notes.push(_active_notes[i]);
     }
+    var num_selected_after = _selected_notes.length;
 
     post ("[noteChange] selected notes: " + _selected_notes.join(', ') + "\n")
 
@@ -174,7 +176,7 @@ function noteChange(note, velocity) {
         o.hidden = 1;
     }
 
-    if (_selected_notes.length > 0) {
+    if (num_selected_after > num_selected_before) {
         var step_store = this.patcher.getnamed("StepSeq");
         post ("[noteChange] sending message << fold_pitch " + _selected_notes.join(', ') + " >>\n");
         //step_store.message("fold_pitch", _selected_notes)

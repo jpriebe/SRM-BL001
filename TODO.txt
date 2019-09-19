@@ -1,6 +1,8 @@
 BUGS:
 
-  - newly added folding is buggy -- when you let go of keys, the folding removes each note one-by-one, even if you have a generated pattern; and if you unfold then fold, you get the "ghost" notes that are put in place for off beats
+  - newly added folding is a little buggy; maybe it should be tied to the "lock" -- maybe you never reset the
+    list of selected notes until all notes are released.  This would let you do more than 5 notes at a time,
+    even if you only have one hand on the midi controller
 
   - I think the note detection is getting screwed up when the pattern is playing; it seems like it's listening to the notes on and off, and changing the selected notes (only when you have a clip playing in the session view with blgen active)
 
