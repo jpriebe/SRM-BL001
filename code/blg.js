@@ -109,17 +109,24 @@ function regen() {
 
 // triggered via a message when midi notes change
 function noteChange(note, velocity) {
-    if (note !== null) {
-        _active_notes = _active_notes.filter(function(item) { 
-            return item !== note
-        })
-
-        if (velocity > 0) {
-            _active_notes.push(note)
-        }
+    if (note === null) {
+        return;
     }
 
+    post ("[noteChange] note received: " + note + ", " + velocity + "\n");
+
+    _active_notes = _active_notes.filter(function(item) { 
+        return item !== note
+    })
+
+    if (velocity > 0) {
+        _active_notes.push(note)
+    }
+
+    post ("[noteChange] active notes: " + _active_notes.join(', ') + "\n")
+
     if (_lock_note_selection) {
+        post ("[noteChange] note selection locked; bailing\n");
         return;
     }
 
@@ -127,6 +134,8 @@ function noteChange(note, velocity) {
     for (var i = 0; i < _active_notes.length; i++) {
         _selected_notes.push(_active_notes[i]);
     }
+
+    post ("[noteChange] selected notes: " + _selected_notes.join(', ') + "\n")
 
     if (_active_notes.length == 0) {
         o = this.patcher.getnamed("togLockSelectedNotes");
@@ -165,8 +174,14 @@ function noteChange(note, velocity) {
         o.hidden = 1;
     }
 
-    //post(note + ", " + velocity + "\n")
-    post ("selected notes: " + _active_notes.join(', ') + "\n")
+    if (_selected_notes.length > 0) {
+        var step_store = this.patcher.getnamed("StepSeq");
+        post ("[noteChange] sending message << fold_pitch " + _selected_notes.join(', ') + " >>\n");
+        //step_store.message("fold_pitch", _selected_notes)
+        //step_store.message("fold_pitch " + _selected_notes.join(' '))
+        //step_store.fold_pitch(_selected_notes);
+        outlet(1, _selected_notes);
+    }
 }
 
 // triggered in response to the bang message received when user clicks the "Generate" text object 
@@ -184,6 +199,11 @@ function generateSequence() {
     _steps = [];
 
     _steps = _pg.generateSteps(_selected_notes, _pg_params)
+
+    var stepstr = JSON.stringify (_steps);
+    var step_store = this.patcher.getnamed("stepStore");
+    step_store.message(1, stepstr)
+    //step_store.setvalueof(stepstr)
 
     post("Generated sequence with " + _steps.length + " steps\n");
 }
@@ -248,10 +268,10 @@ function clipOut() {
 // called once for each note output by the live.step when it receives the "dump" message;
 // dump starts when user clicks the "clip" button
 function dumpStep(s, i, pitch, velocity, duration) {
-    post("received dump step: " + s + ", " + i + ", " + pitch + ", " + velocity + "\n");
     if (s !== 'step') {
-        post("ignoring dump of type " + s + "\n")
+        return;
     }
+    post("received dump step " + i + "/" + _steps.length + ", " + pitch + ", " + velocity + "\n");
     if (i === 1) {
         _live_steps = [];
     }

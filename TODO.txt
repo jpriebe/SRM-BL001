@@ -1,5 +1,24 @@
 BUGS:
+
+  - newly added folding is buggy -- when you let go of keys, the folding removes each note one-by-one, even if you have a generated pattern; and if you unfold then fold, you get the "ghost" notes that are put in place for off beats
+
   - I think the note detection is getting screwed up when the pattern is playing; it seems like it's listening to the notes on and off, and changing the selected notes (only when you have a clip playing in the session view with blgen active)
+
+  - I'm not sure what is doing this -- I saw the live.steps jumping all over the timeline; replaced the timing objects to hopefully fix this?
+
+  - tried to hit "clip" and got "no object selected" errors in the console:
+
+call create_scene -1: no valid object set
+call create_clip 16: no valid object set
+call set_notes: no valid object set
+call notes 48: no valid object set
+call note 36 7.0000 0.2500 90: no valid object set
+call note 36 0.0000 0.2500 90: no valid object set
+call note 36 0.7500 0.2500 90: no valid object set
+call note 36 1.5000 0.2500 90: no valid object set
+
+  (I think what is happening is that somehow the JS context is lost, and global variables that were set when the pattern was generated are no longer available)
+
 
 FEATURES:
 
