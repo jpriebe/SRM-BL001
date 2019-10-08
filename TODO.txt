@@ -5,7 +5,9 @@ the random pattern is modified (but not regenerated).
 
   - super-short notes in pattern?  They actually sound pretty cool, but I don't know how they're getting in there...
 
-  - when transposing re-fold
+  - the +1 / -1 don't do what I thought they did -- they shift and wrap around; very strange, but kind of interesting
+
+  - when transposing, re-fold
 
   - I think the note detection is getting screwed up when the pattern is playing; it seems like it's listening to the notes on and off, and changing the selected notes (only when you have a clip playing in the session view with blgen active)
   - When only "new accent pattern" was selected, any manual edits in the grid I had performed were lost when I hit "regen"
