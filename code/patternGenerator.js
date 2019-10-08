@@ -158,12 +158,15 @@ function pattern_to_steps (notes, params) {
             //post("notes.length: " + notes.length) + "\n"
 
             steps[i] = {
-                note: note,
+                velocity: 0,
+                duration: 0,
+                note: 0,
+                probability: 0
             }
             switch (beats[i]) {
                 case 'X':
-                    // random slide
-                    if (last_note_down > -1) {
+                    // random slide; only allow up to 480 ticks, because the next step is 960, which is ridiculous
+                    if ((last_note_down > -1) && (i - last_note_down < 4)) {
                         r = Math.floor(Math.random() * 100);
                         post("slide probability: " + params.slideProbability + "; r: " + r + "\n");
                         if (r < params.slideProbability) {
@@ -174,6 +177,7 @@ function pattern_to_steps (notes, params) {
                     }
                     r = Math.floor(Math.random() * 100);
                     if (r < params.noteProbability) {
+                        steps[i].note = note;
                         steps[i].velocity = _baseline_velocity;
                         steps[i].duration = 120;
                         steps[i].probability = 100;
@@ -185,16 +189,8 @@ function pattern_to_steps (notes, params) {
                     if (last_note_down > -1) {
                         steps[last_note_down].duration += 120;
                     }
-                    steps[i].velocity = 0;
-                    steps[i].duration = 0;
-                    steps[i].note = 0;
-                    steps[i].probability = 0;
                     break;
                 case '.':
-                    steps[i].velocity = 0;
-                    steps[i].duration = 0;
-                    steps[i].note = 0;
-                    steps[i].probability = 0;
                     break;
             }
         } 
@@ -280,11 +276,10 @@ function generateSteps (notes, params) {
         post("new accent pattern: " + _current_accent_pattern + "\n");
     }
 
+    post("[generateSteps] params: " + JSON.stringify(params) + "\n")
+
     var steps = pattern_to_steps (notes, params);
     _last_steps = steps;
-
-    post(JSON.stringify(params) + "\n");
-    //post(JSON.stringify(steps) + "\n");
 
     return steps;
 }
