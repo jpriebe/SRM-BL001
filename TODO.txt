@@ -1,12 +1,10 @@
 BUGS:
 
-  - newly added folding is a little buggy; maybe it should be tied to the "lock" -- maybe you never reset the
-    list of selected notes until all notes are released.  This would let you do more than 5 notes at a time,
-    even if you only have one hand on the midi controller
+  - super-short notes in pattern?  They actually sound pretty cool, but I don't know how they're getting in there...
+
+  - when transposing re-fold
 
   - I think the note detection is getting screwed up when the pattern is playing; it seems like it's listening to the notes on and off, and changing the selected notes (only when you have a clip playing in the session view with blgen active)
-
-  - I'm not sure what is doing this -- I saw the live.steps jumping all over the timeline; replaced the timing objects to hopefully fix this?
 
   - tried to hit "clip" and got "no object selected" errors in the console:
 
@@ -26,12 +24,8 @@ FEATURES:
 
 - add tons more patterns
 
-- support for slide
-
-- have a way to get some notes in there without a keyboard
-
 - allow for control over max num of accents, including unlimited
 
-- when generating or transposing, fold and unfold the live.step, or zoom to fit
+- when transposing, fold and unfold the live.step, or zoom to fit
 
 - undo mechanism (maybe 100 undo patterns?)

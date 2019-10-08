@@ -146,6 +146,7 @@ function pattern_to_steps (notes, params) {
 
     var rhythm = _current_pattern['rhythm'];
     var beats = rhythm.split('');
+    var r;
 
     if (params.newNoteAssignments) {
         var last_note_down = -1;
@@ -153,7 +154,7 @@ function pattern_to_steps (notes, params) {
         for (i = 0; i < beats.length; i++) {
             var note = select_random_note (notes);
 
-            //post("note: " + note + "\n")
+            post("[" + i + "] " + beats[i] + " (" + last_note_down + ")\n");
             //post("notes.length: " + notes.length) + "\n"
 
             steps[i] = {
@@ -161,12 +162,26 @@ function pattern_to_steps (notes, params) {
             }
             switch (beats[i]) {
                 case 'X':
-                    steps[i].velocity = _baseline_velocity;
-                    steps[i].duration = 120;
-                    steps[i].probability = 100;
-                    last_note_down = i;
+                    // random slide
+                    if (last_note_down > -1) {
+                        r = Math.floor(Math.random() * 100);
+                        post("slide probability: " + params.slideProbability + "; r: " + r + "\n");
+                        if (r < params.slideProbability) {
+                            var slide_duration = 120 * (i - last_note_down);
+                            post("sliding note " + last_note_down + " by " + slide_duration + " ticks...\n")
+                            steps[last_note_down].duration += slide_duration;
+                        }
+                    }
+                    r = Math.floor(Math.random() * 100);
+                    if (r < params.noteProbability) {
+                        steps[i].velocity = _baseline_velocity;
+                        steps[i].duration = 120;
+                        steps[i].probability = 100;
+                        last_note_down = i;
+                    }
                     break;
-                    case '-':
+                case '-':
+                    // forced slide
                     if (last_note_down > -1) {
                         steps[last_note_down].duration += 120;
                     }
