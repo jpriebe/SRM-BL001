@@ -1,10 +1,18 @@
 BUGS:
 
+  - initial behavior of live grid is strange -- you get a random pattern until you hit a note, at which point,
+the random pattern is modified (but not regenerated).
+
   - super-short notes in pattern?  They actually sound pretty cool, but I don't know how they're getting in there...
 
   - when transposing re-fold
 
   - I think the note detection is getting screwed up when the pattern is playing; it seems like it's listening to the notes on and off, and changing the selected notes (only when you have a clip playing in the session view with blgen active)
+  - When only "new accent pattern" was selected, any manual edits in the grid I had performed were lost when I hit "regen"
+
+  - maybe set a max length of glide, so you don't get ridiculous whole notes -- cap it at 1/2 note?
+
+  - swing default value not working
 
   - tried to hit "clip" and got "no object selected" errors in the console:
 
@@ -29,3 +37,5 @@ FEATURES:
 - when transposing, fold and unfold the live.step, or zoom to fit
 
 - undo mechanism (maybe 100 undo patterns?)
+
+- kind of like the idea of the random pattern -- at least the one that it starts out with is pretty good.  We could add a pattern like "XXXXXXXXXXXXXXXX" to simulate that, but it would only come up occasionally; maybe there should be a special setting for that
