@@ -38,6 +38,27 @@ function liveInit() {
     post("[liveInit] unchecking togLockSelectedNotes...\n")
     var o1 = this.patcher.getnamed("togLockSelectedNotes")
     o1.assign(0)
+
+    // initialize pattern to null notes
+    for (var i = 0; i < 32; i++) {
+        _steps[i] = {
+            note: 0,
+            velocity: 0,
+            duration: 120,
+            probability: 0
+        }
+    }
+    sendSteps();
+
+    // fold the view to one low octave
+    _fold_notes = [];
+    for (var n = 43; n <= 55; n++) {
+        _fold_notes.push(n);
+    }
+
+    outlet(2, 1);
+    outlet(1, _fold_notes);
+    
     post("[liveInit] done.\n")
     _init = true;
 }

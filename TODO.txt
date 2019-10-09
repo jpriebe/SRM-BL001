@@ -1,5 +1,7 @@
 BUGS:
 
+  - regen after a transpose gets the wrong fold
+
   - initial behavior of live grid is strange -- you get a random pattern until you hit a note, at which point,
 the random pattern is modified (but not regenerated).
 
