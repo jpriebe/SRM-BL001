@@ -140,6 +140,7 @@ function setMaxNumAccents(val) {
 function regen() {
     generateSequence();
     sendSteps();
+    computeFoldNotes();
 }
 
 // triggered via a message when midi notes change
@@ -230,40 +231,42 @@ function noteChange(note, velocity) {
     }
 
     if (num_selected_after > num_selected_before) {
-        post ("[noteChange] sending message << fold_pitch " + _selected_notes.join(', ') + " >>\n");
-
-        // find the full range of selected notes; we're going to fold to that range
-        var min = 999999;
-        var max = -999999;
-
-        var n = 0;
-        for (i = 0; i < _selected_notes.length; i++) {
-            n = _selected_notes[i];
-            if (n < min) {
-                min = n;
-            }
-            if (n > max) {
-                max = n;
-            }
-        }
-
-        // never fold to smaller than 1 octave
-        if (max - min < 12) {
-            max = min + 12
-        }
-
-        _fold_notes = [];
-        for (n = min; n <= max; n++) {
-            _fold_notes.push(n);
-        }
-
-        //post ("[noteChange] min: " + min);
-        //post ("[noteChange] max: " + max);
-        //post ("[noteChange] folding to (" + fold_notes.join(',')  + ")...\n");
-        
-        outlet(2, 1);
-        outlet(1, _fold_notes);
+        computeFoldNotes()
     }
+}
+
+function computeFoldNotes() {
+    // find the full range of selected notes; we're going to fold to that range
+    var min = 999999;
+    var max = -999999;
+
+    var n = 0;
+    for (i = 0; i < _selected_notes.length; i++) {
+        n = _selected_notes[i];
+        if (n < min) {
+            min = n;
+        }
+        if (n > max) {
+            max = n;
+        }
+    }
+
+    // never fold to smaller than 1 octave
+    if (max - min < 12) {
+        max = min + 12
+    }
+
+    //post ("[noteChange] min: " + min);
+    //post ("[noteChange] max: " + max);
+    //post ("[noteChange] folding to (" + fold_notes.join(',')  + ")...\n");
+
+    _fold_notes = [];
+    for (n = min; n <= max; n++) {
+        _fold_notes.push(n);
+    }
+
+    outlet(2, 1);
+    outlet(1, _fold_notes);
 }
 
 // triggered in response to the bang message received when user clicks the "Generate" text object 
@@ -312,7 +315,7 @@ function transpose (value) {
 // loads the steps into the sequencer
 function sendSteps() {
     outlet(0, "nstep", _steps.length)
-    outlet(0, "loop", 0, _steps.length)
+    outlet(0, "loop", 1, _steps.length)
     for (var i = 0; i < _steps.length; i++) {
         var step = _steps[i];
         outlet(0, "step", i + 1, step.note, step.velocity, step.duration, step.probability)

@@ -1,15 +1,7 @@
 BUGS:
 
-  - regen after a transpose gets the wrong fold
-
-  - initial behavior of live grid is strange -- you get a random pattern until you hit a note, at which point,
-the random pattern is modified (but not regenerated).
-
   - super-short notes in pattern?  They actually sound pretty cool, but I don't know how they're getting in there...
 
-  - super-long notes in pattern?  They also sound pretty cool, but I don't know how they're getting in there...
-
-  - I think the note detection is getting screwed up when the pattern is playing; it seems like it's listening to the notes on and off, and changing the selected notes (only when you have a clip playing in the session view with blgen active)
   - When only "new accent pattern" was selected, any manual edits in the grid I had performed were lost when I hit "regen"
 
   - tried to hit "clip" and got "no object selected" errors in the console:
@@ -32,8 +24,13 @@ FEATURES:
 
 - allow for control over max num of accents, including unlimited
 
-- when transposing, fold and unfold the live.step, or zoom to fit
-
 - undo mechanism (maybe 100 undo patterns?)
 
-- kind of like the idea of the random pattern -- at least the one that it starts out with is pretty good.  We could add a pattern like "XXXXXXXXXXXXXXXX" to simulate that, but it would only come up occasionally; maybe there should be a special setting for that
+- kind of like the idea of a random pattern.  We could add a pattern like "XXXXXXXXXXXXXXXX" to simulate that, but it would only come up occasionally; maybe there should be a special setting for that
+
+
+NOTES:
+
+- you don't have complete control over the length of notes in the live.step -- you can do 1/16, 1/8, 1/4, 1/2.  You can't do a dotted 1/8, for example.  This makes it hard to get just the right amount of glide.  If notes are 2 16th notes apart, the first note will be rounded up to a 1/4 note, causing the glide to go from note 1 to note 2 and back to note 1
+
+  - note detection gets screwed up when the pattern is playing; it seems like it's listening to the notes on and off, and changing the selected notes (only when you have a clip playing in the session view with blgen active)
