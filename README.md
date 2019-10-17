@@ -11,6 +11,7 @@ These were built with SRM-DB001 and SRM-BL001 with no post processing on the MID
 
 - [demo-001](https://soundcloud.com/jason-priebe/srm-demo-001)
 - [demo-002](https://soundcloud.com/jason-priebe/srm-demo-002)
+- [demo-003](https://soundcloud.com/jason-priebe/srm-demo-003)
 
 # how to use
 
