@@ -5,6 +5,13 @@ This is a Max for Live device to generate Tech House basslines
 
 ![SRM-BL001 Screenshot](https://github.com/jpriebe/SRM-BL001/blob/master/SRM-BL001-screenshot.png?raw=true)
 
+# examples
+
+These were built with SRM-DB001 and SRM-BL001 with no post processing on the MIDI notes.
+
+- [demo-001](https://soundcloud.com/jason-priebe/srm-demo-001)
+- [demo-002](https://soundcloud.com/jason-priebe/srm-demo-002)
+
 # how to use
 
 - add SRM-BL001 to your track
