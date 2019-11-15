@@ -18,6 +18,9 @@ var _accent_patterns = [
 
 var _patterns = [
     {
+        'rhythm': '..X...X.X.XX...X...X..X.X.XX....',
+    },
+    {
         'rhythm': 'X.X...X.X..X.XX.X.X...X.X.......',
     },
     {

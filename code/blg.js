@@ -2,8 +2,6 @@ inlets = 1;
 outlets = 3;
 autowatch = 1;
 
-include("lm.js");
-
 var _active_notes = []    // notes actually being held down
 var _selected_notes = []  // notes being considered for inclusion
 var _fold_notes = []      // note range for folding the live.grid
