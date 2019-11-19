@@ -95,6 +95,48 @@ var _patterns = [
     {
         'rhythm': '..X..X..X.....XX..X..X..X.......',
     },
+    {
+        'rhythm': 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    },
+    {
+        'rhythm': 'XXX.Xxx.........Xx..X.X.X...Xx..XXX.Xxx.............X.X.Xx......',
+    },
+    {
+        'rhythm': 'X.X.X.X.X.X.X..XX.X.X.X.X.X.X...X.X.X...X.X.X..XX.X.X.X.X.X.X...',
+    },
+    {
+        'rhythm': 'X.X...X......XX.X.X...X.........X.X...X......XX.X.X...XX.......X',
+    },
+    {
+        'rhythm': 'X.X.X.XX.....XX.X.X.X.XX....Xx..',
+    },
+    {
+        'rhythm': '..X.XXXX.....XX...X.XXXX....Xxx.',
+    },
+    {
+        'rhythm': 'X..XX.X.X.X.X...X..XX.X.X.X.X...',
+    },
+    {
+        'rhythm': 'X.....X.X.....X.X.....X.X....XX.X.....X.X.....X.X.....X.X..X.XX.'
+    },
+    {
+        'rhythm': 'X..XX.X.Xx..Xx..X..XX.X.X.X.Xx..X..XX.X.Xx..Xx..X..XX.X.X.....XX',
+    },
+    {
+        'rhythm': 'X...X.X.X...Xx..X...X.X.X.Xx..XX',
+    },
+    {
+        'rhythm': 'X.X..X..X.X..X..',
+    },
+    {
+        'rhythm': 'X.X..X..X.X..X..X.X..X..X.X..X..',
+    },
+    {
+        'rhythm': 'X.X.XX.XX.X.X.X.',
+    },
+    {
+        'rhythm': 'X.X.XX.XX.X.X.X.X.X.XX.XX.X.X.X.',
+    },
 ]
 
 var _current_pattern = null;
@@ -286,5 +328,7 @@ function generateSteps (notes, params) {
 
     return steps;
 }
+
+post("patternGenerator.js loaded, " + _patterns.length + " patterns found.\n")
 
 exports.generateSteps = generateSteps;
