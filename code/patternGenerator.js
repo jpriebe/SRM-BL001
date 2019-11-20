@@ -137,6 +137,42 @@ var _patterns = [
     {
         'rhythm': 'X.X.XX.XX.X.X.X.X.X.XX.XX.X.X.X.',
     },
+    {
+        'rhythm': 'Xx.XX.X.Xx.XX.X.Xx.XX.X.Xx.X..X.',
+    },
+    {
+        'rhythm': 'X.X..........XX.XxX.............X.X..........XX.XxX...X...X...X.',
+    },
+    {
+        'rhythm': 'X....XX.X.......X.....X.Xx..X...',
+    },
+    {
+        'rhythm': 'X..X..X.X..X....X..X..X.X..X....X..X..X.X..X....X..X..X.X..X..XX',
+    },
+    {
+        'rhythm': 'X.X.X..X.X.XXXXXX.X.X..X.X.XX...',
+    },
+    {
+        'rhythm': 'XX.XXX.XXx......XX.XXX.XXx..Xx..XX.XXX.XXx......XX.XXX.XXx....XX',
+    },
+    {
+        'rhythm': 'X.X...XXXX..X...X.X...XXXX..X..X',
+    },
+    {
+        'rhythm': 'X..XX.X.X.......X..XX.X.X...X.X.X..XX.X.X.......X..XX.X.X.....XX',
+    },
+    {
+        'rhythm': 'X...X...XxxX....X...X..X........X...X...XxxX....X...X..X...X.XX.',
+    },
+    {
+        'rhythm': 'X.X.X...X.X.X...X.X.X.X.X.X.X...',
+    },
+    {
+        'rhythm': 'Xxxxxx..X.X.X.X.Xxxx....X.X.X...',
+    },
+    {
+        'rhythm': 'Xxxx...X..X.......X.XX.X..X.....Xxxx...X..X.......X.XX.X..X...XX',
+    },
 ]
 
 var _current_pattern = null;
